@@ -14,6 +14,7 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument("-i", "--input", required=True)
     p.add_argument("-o", "--output", required=True)
+    p.add_argument("-d", "--duration", type=int, default=50 ,help="Define duration in milliseconds of each frame in the GIF (Don't set too low or your GIF might render REALLY slowly!) (Default: 50)")
     args = p.parse_args()
     spritesheet = Image.open(args.input)
     width, height = spritesheet.size
@@ -42,7 +43,7 @@ def main():
         left = 0
         up += down
     frames = [Image.open(image) for image in files]
-    frames[0].save(args.output, save_all=True, append_images=frames[1:], duration=0, loop=0, lossless=True, optimize=False)
+    frames[0].save(args.output, save_all=True, append_images=frames[1:], duration=args.duration, loop=0, lossless=True, optimize=False)
 
 
 if __name__ == "__main__":
