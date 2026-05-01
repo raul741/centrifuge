@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import argparse, os
+import argparse, os, shutil
 from PIL import Image
 
 def main():
@@ -15,6 +15,7 @@ def main():
     p.add_argument("-i", "--input", required=True)
     p.add_argument("-o", "--output", required=True)
     p.add_argument("-d", "--duration", type=int, default=50 ,help="Define duration in milliseconds of each frame in the GIF (Don't set too low or your GIF might render REALLY slowly!) (Default: 50)")
+    p.add_argument("-k", "--keep-temp", default=False, action="store_true", help="Don't delete temporary folder containing frames used to build the GIF.")
     args = p.parse_args()
     spritesheet = Image.open(args.input)
     width, height = spritesheet.size
@@ -44,6 +45,8 @@ def main():
         up += down
     frames = [Image.open(image) for image in files]
     frames[0].save(args.output, save_all=True, append_images=frames[1:], duration=args.duration, loop=0, lossless=True, optimize=False)
+    if not args.keep_temp:
+        shutil.rmtree(PATH)
 
 
 if __name__ == "__main__":
